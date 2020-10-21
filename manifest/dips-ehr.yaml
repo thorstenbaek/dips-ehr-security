@@ -1,0 +1,170 @@
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/cloud/deploy.yaml
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=localhost/O=localhost"
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-dips-ehr
+  labels:
+    app.kubernetes.io/name: ns-dips-ehr
+    app.kubernetes.io/instance: ns-dips-ehr 
+---
+apiVersion: v1
+kind: Secret
+metadata:
+    name: ssl-certificate
+    namespace: ns-dips-ehr
+data:
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tDQpNSUlFclRDQ0FwVUNBUUV3RFFZSktvWklodmNOQVFFTEJRQXdFVEVQTUEwR0ExVUVBd3dHUkVsUVUwRlRNQjRYDQpEVEl3TVRBeE1ERXhNak0wTjFvWERUUTRNREl5TmpFeE1qTTBOMW93S0RFU01CQUdBMVVFQXd3SmJHOWpZV3hvDQpiM04wTVJJd0VBWURWUVFLREFsc2IyTmhiR2h2YzNRd2dnSWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUNEd0F3DQpnZ0lLQW9JQ0FRQ1dtRzVuNm9YT1gydzhvdzg5NVlFcFBCMFU2N3FCR1pqTGUyMFBMMFRpRU4ySUJ0MkZYKzhBDQpjRC9uMFB1eGRiVmpuNkl1cU1Ub1VGOWp0Ymg5MHRLbS9uZWxQN0dFTWtuNDBQVDV2R1RzVlZrRmlnUlV1ZSsxDQpac05YNU9LeXI0L29FY05Ndnd1Q0lHOEFBWitudG5jVkJSRHpQak9XbHZzOElmdzdwZW1relp6QUNaT1pTUWVPDQpxenhmWUo1VTc5YURFQ3JjamI5THhNaVpUMVFicUpOWEJmTkZCeTUxQ3lVOGIwTGRXZVdwZHZydCswaU10MHZqDQpHYzMzSUZDdWVjVUtuRmIwTmJLeWhEdW1UUDB3Z3YxT2tDaFp5aU04N3V3Z29zbFpyMEZXNUc5MHhLRkhzUVVoDQpWMHBvYWRsQnA3TUtvcE9ZR3MrS1NOaHhsZjErMXNTc3kwaUFMcVNJMk1SdFgzQ3JDREpHdTN2TUNVK3h0ZHNIDQpsM2JWc3hvQjdoVTNHTU9HT3FZemt6bnB6ZWhjaHZSKzNwS1ZqcFNoM3ZxcFk2c3Z3OHAySFFIQkZuYTUyUGgrDQoyWmtTb3hwVGQ5WXlSb2pWQ1hZTHRLRG4wZDVvZmVkdENvQllNZzNWL0tGdlltU01zbzNGajc5STlUT0FCNC9JDQpkRGlhdXBHeUZjUS9SZHZtRmpIL0ZRUFAzRUc5RG9sVWl4OUNzQUM0ektYVmpqWTF3dXpZbVV1bE9oaDZ4T3VDDQpiL3M1cmdMVXNZUWlzMmN6QWs4RlhZRWNHUThud2MrNkdFZW9neTV4WVlVR1JrTzVVay9jbWRDZmVDL1FVYzQyDQpWVUJJZkw1aCthZlFoKzlqMTdnbkZudmZSblBjME94QjBUeHJneEJoU1A4SHNnRjJBeTlrOXdJREFRQUJNQTBHDQpDU3FHU0liM0RRRUJDd1VBQTRJQ0FRQnREZGhPenA3cCtZRkZ4N2ZJMEpYLzRjaUZKUTZwNko4K3pGZjhtQ0xvDQo3TVhJaitpbElCcHBOVzhWZzRTamNVa0MwN3hOcG5rYkc3d0N6cVg5MUhYMmlWUElTSVFiV2tyWFVYSlhIZkZWDQpsNUQ1bjBvU0s1ckhJbEVqL1VlT1I2QTQwNHpMM25SaUluc1JUcDFyN1NPWGRmZ0FEUFdRQkQ5ZGN2dE1oRkJDDQpZMTF5aFROK0tOdWhZUWNSdVVibTg1ZDUvbEZDMkozdHBKL1IyWUl4b3AyV29BQWxhL1pZRHkwV3kvTndFOTREDQpyRlFnMUsvZExTeVpEci8ydFhSOHF2V1QwdUtlWk9FTjFnb2FhMzdnSy81STZpaFM1KzJHRmJLNEFuKzRIbnRLDQpERzFGUlFjUURWOUxxUFYwMWRPY0tIOXZOQlFXeWoxU0hCd3BWOFZoSDk5Nk1GT2tvS29WckhMOVp1TXpJdnNVDQpVOVNCVDdudXp3OTRpc0FIbHZXYkEvdXY2WGJvTkpBeDVRcXl0alRhWHM3QnhsYmF4cnVZRkUxbmcvd3ZhQ1hLDQpVbiszd1Vja1dOa3ZZWmdpald1blQ5Y3VFVEg4bHNScEY0SlpteDNTdWhlOG5HLzExVFptUFYrR01qdnRXcG1yDQpDODc0TVp0Tkd5WitNdlA4Z1hMcDkvSll5WUE5RHdQKzJMaFg2ZWdtVDROMUx5UDdLMHBNYVVpRVgyTzhtVjRIDQo1eStzUFVldmJKK3JzRWZTRXkrNTF2Z21zYmlGK2FMU0UvZVFzanFrZG92cEI1Y1I3K2p0Ny8xK2ZtTzBvblVkDQpSdmtWNFVQTVd1NXlWM09xYVA1SDQ5dnpsYXRkOWEraDFYc1NkSlVLUjRBNUs4L3dLNXRHdk0yQkJTMzU1a3JxDQpEZz09DQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tDQo=
+  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tDQpNSUlKUXdJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0NTMHdnZ2twQWdFQUFvSUNBUUNXbUc1bjZvWE9YMnc4DQpvdzg5NVlFcFBCMFU2N3FCR1pqTGUyMFBMMFRpRU4ySUJ0MkZYKzhBY0QvbjBQdXhkYlZqbjZJdXFNVG9VRjlqDQp0Ymg5MHRLbS9uZWxQN0dFTWtuNDBQVDV2R1RzVlZrRmlnUlV1ZSsxWnNOWDVPS3lyNC9vRWNOTXZ3dUNJRzhBDQpBWitudG5jVkJSRHpQak9XbHZzOElmdzdwZW1relp6QUNaT1pTUWVPcXp4ZllKNVU3OWFERUNyY2piOUx4TWlaDQpUMVFicUpOWEJmTkZCeTUxQ3lVOGIwTGRXZVdwZHZydCswaU10MHZqR2MzM0lGQ3VlY1VLbkZiME5iS3loRHVtDQpUUDB3Z3YxT2tDaFp5aU04N3V3Z29zbFpyMEZXNUc5MHhLRkhzUVVoVjBwb2FkbEJwN01Lb3BPWUdzK0tTTmh4DQpsZjErMXNTc3kwaUFMcVNJMk1SdFgzQ3JDREpHdTN2TUNVK3h0ZHNIbDNiVnN4b0I3aFUzR01PR09xWXprem5wDQp6ZWhjaHZSKzNwS1ZqcFNoM3ZxcFk2c3Z3OHAySFFIQkZuYTUyUGgrMlprU294cFRkOVl5Um9qVkNYWUx0S0RuDQowZDVvZmVkdENvQllNZzNWL0tGdlltU01zbzNGajc5STlUT0FCNC9JZERpYXVwR3lGY1EvUmR2bUZqSC9GUVBQDQozRUc5RG9sVWl4OUNzQUM0ektYVmpqWTF3dXpZbVV1bE9oaDZ4T3VDYi9zNXJnTFVzWVFpczJjekFrOEZYWUVjDQpHUThud2MrNkdFZW9neTV4WVlVR1JrTzVVay9jbWRDZmVDL1FVYzQyVlVCSWZMNWgrYWZRaCs5ajE3Z25GbnZmDQpSblBjME94QjBUeHJneEJoU1A4SHNnRjJBeTlrOXdJREFRQUJBb0lDQVFDUENIeGtpcVZJRyszTHNmdjZDQStqDQpRSXRHb1paa3BCRXh3eXNVYndyM3hKa0VaN0RpeXZsUDYwMW5PbUMwYmw0NEh4aUZSSnF4SkJWVnVQVmYzR3RqDQpYUEg2ckFKSTB4TGJGbXgyL203RTRWTktKWXB6aHA2Y0p0eUdrTWlZZXBNdUVpRHl0Y21TY0llODg4M1dGMElIDQpYdVo0Z2EyeDYvajNaamdSMTBXUTJCRjNmQ0VLU0FpN2d2dzJncWdmZUNUQUd3ejZxazcxQWhTZE9IRmtTN3FWDQp2dnNOcHdLQy9IRURjNUdJZDZmZ1N6ZU43VXM5QzZNeU1nSWtKRGM5WUQ2OEV6MnJlWTBlYk9YU3ovRHlzSmN5DQpsVTBkNnhXSS9FeWR1citQUlJ2RUVmZWlhbGZjcGM5L21VNzgyUHdXbGRkQjFLUm1wYUJWY1ZiU20ybEhuV2p5DQpXS3I1aWdmTWdmdmRkRUpodE1TWkhWVVpJQk9lQ1dXSGJvRFJxZlJqSEVCeFhmeGpSYTFBbXhiQy9CUEsxTW5XDQp3dU1UaGtYVGtFcW90QldDZ29jRnhtZzM5MjRHdWtSaVZQV1RuSE1Hc3RCWlF2VUpaOUE4dk5hc1VxSlZwa0lRDQpsbGg2L1N1SElTSDZlaTA3U05MVStLREp3RDFUb0dKby9majFwMjVvaUY5R3BFYkJ6MmYyU1E0eitvNDEzd04xDQpBcVRQVVNrK0JJbWZvaHBjZGxZcDQ2ZDFCSnJhQ2tlUnUwTUVudmdLak5NTGZ6WFdlcDcySlJYTUNpYkNRamdFDQpsbkd6cVluQUgxTTdwcVFRT0M4TVNXZzdZUXA5T0N4YW01YVBwV2ZGUVZqSmxjMFZiL3FsanBKUmFKdjA2dnFIDQo5bGxjaS92dG5hWHNXV0QvSVl1dWNRS0NBUUVBeGdJT0JsMDlzS215TGV1bndYMUVtc2NhWjNEQzMrZU1PZW93DQptR1Y4eXh2VXJrSzAzWjlTbyt4S1pvRVBvcTRpMWk3b1BSRUFtUnBqeHFMVExKWlZVWWx2eWVmYTJJNENUSmYrDQpDS0hKMzJrM3gyWFBVdUY5Y1hKaUZUS3BVeDVrRDQvVTVsVE1Vb3NvNlVkT1ZmblovN1VFYm9KeGlHY1RFcCtjDQp0RWpMVlFpZVhtM09HOGVSUjR2UmtWRnNNdXVOWjFGRUZMWVA3YzdvaVE5TFBHWWF0SVpUVU9yYk9GR2wzWG9FDQpGUHo0bGVRK2xqZEFVeTZNaE9yL2ExMjRpUWwvUVZJbzhwNWVFUHJZR29GMHpValVKWjFzOU9TZERZdDBLK0piDQpPQ3NaQkxXQWxpRlRsdUtqVEtUTExCYWEwWVdzZHNlUDZuengyWjZ3ZTRUM0lGa0c2d0tDQVFFQXdyT01FaytqDQo0cDlvNFkxNkZuak9rQlhpTncrRENZOHBRbEo3ZEs3UzNVSGNPWUZkSHhJZkpHejJGSHp0ODVBckNnVEhVRDN0DQpxWG9UT3Nkdm1YV1Z0cUIweEwrQjVaUjl4M0krV3dhSFFIZUY3OXRhU0pkaUM5d2oxU09LYkZueWUyUkJiNnlNDQo0Y2JlWFB3Rjk4WlRrVE50R1JNOFl6ZVREaEdQNkwwZ2Q2enEwK25ndGZzcU1aSDNDT2Q2NEdYbkI0amNLSnhFDQpldUs0YlloZ2U4WHJuSDhqU2ZOdkZKR25ELzBnUElJL0o2c1RpbkN1OGlBUTNDZ05HWWlOYWM0UzFtZ2NhUWluDQpST2xpdTJCQ0ZYb3Jybm1hank0VzR0MkFEZGI5NkhZT3JORk13Q3VCNm9RY0VhcEVOOG9NbkZ4UWIrVU1pQ0dmDQpKd3MzT2gzTmE1VHZKUUtDQVFBS0cveS9VbTlkMzZ3Yk1CYm1pQkRDbmp1NDRFYnl5NDJiUDF1dnpDNnM2QVRaDQp5TW9YTHBVM2pVN1hJT3U5Y0lxU3lONU9qOW1wOTNEMHFVZUMxVUlSNGFSMWVJTHgzMzQ2anVBSGJNc3p2dGw4DQpNclI5Rk1va3lxUTdWTlRVUzQ3c1JIbW9NTmdsdHJrbC85LzkvNzJqa29oaFpBT0w1VWRTQWhnc0ZETmRhZzA3DQo0UHRPNjhkOUVhUm5lUEsvUHN0L1pPVEc4ZXlxUlpBVnYxUW1CMGlCd3dIcDliT3ZrbXVYZlMxTUxRWThFT1VwDQpJalVFaWpIZWIya1BBRC8xcnloeUcxRy80Vm9JSCtaOG8vTmtyNzAxRm02RHFsQmlhcVpKdjByTStWWlRxVGloDQpjWjRrNi9sT1puT0JFcjVneUNSZ0JCeFM2b0ltakRXU2VOMXRKMTUxQW9JQkFDMVZGcWp3eUF5czV3T1ZLRGJ4DQpPODhLZVZndWtXajVYemJrODMrd2NNSTVZbWcxT1pSUmFOVFhWZGhoV2huYW1GckYwQTViek9rbjFqQmFYUjZTDQo1Ui9YYmppZENrYUU4MkFydGw4RlB4cUFlYnZtQzdoWkh1ZjZBcEhPcTUwY3VEdUlsVC9HSWlzelhYU3k3VVRLDQpkWXlhTjYyZDcvSjk3d3hZaEhSQkRMMHdrcUJ5bFBKcUgySFpSWFphUng3V094dGkvemVwWXJ4bDYyRDlYdEdTDQp2SS84ZmgvcXdSTTk4bkxqa2N6azJvV0c3STdRTzd0K1FjNnd1SlFZV2l5bllYVndXaVVPY2J1Mngxa3ZTVk9zDQoxVnpUVFd4RzQrZEFnVjgzam5qQWZCdzZ3eTcvTWttREp2SHAvZVlyY2hJNTREU2RWUFNoTjJnazBXQURybDk5DQpGczBDZ2dFQkFLdUtIRmtqdUkrSlB2VWtLYnBHaDdVZnhIT2huQTk5ZVFMQkhRNWdlQVB1UHBRVEtVS1VONlRYDQpMcWFobUZGdk14U3RFQk5uTEN1WnNkaVRSOVZsMytNNG1WVEhoMW16bDhrYlZuOEVFYUdFYk9jVWZud2M1TEJ5DQpGWm16WlYyMlU3Q2ZNczlsbG80UWozemYvdUdDMzRGVTlCUUZyKytXOWgvcDFFeDN5bDlSQlNIK21lY2txM0d4DQovRTE4UVBLcG1rTHFaYTI2MTJlOG9QajdPZ0ZlYWJZZ05aYW8zQkJDYWw5cnJZTUdGdTdPSUMrN29rQWZSZnFQDQpESFJNUXoyQUtzalV4Qms1TjlsRmRtdVhkNVNucFBUTDV6Smh2WHU3R2RGNEplU0tzTzNnYUpTYmlDSGV5WDJZDQo0ZFRpcmM4S3d4RTl5ZWh6d1pNZUljYXlmc2hObkx3PQ0KLS0tLS1FTkQgUFJJVkFURSBLRVktLS0tLQ0K
+type: kubernetes.io/tls
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dips-ehr-security-app
+  namespace: ns-dips-ehr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dips-ehr-security  
+  template:
+    metadata:
+      labels:
+        app: dips-ehr-security
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: dips-ehr-security
+        image: thorstenbaek/dips-ehr-security:latest
+        ports:        
+        - containerPort: 80
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: security-service
+  namespace: ns-dips-ehr
+spec:
+  selector:
+    app: dips-ehr-security
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80      
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dips-fhir-service-app
+  namespace: ns-dips-ehr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dips-fhir-service  
+  template:
+    metadata:
+      labels:
+        app: dips-fhir-service
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: dips-fhir-service
+        image: thorstenbaek/dips-fhir-service:v1.0.0.0
+        ports:        
+        - containerPort: 80
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fhir-service
+  namespace: ns-dips-ehr
+spec:
+  selector:
+    app: dips-fhir-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80      
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-acme-challenge-app
+  namespace: ns-dips-ehr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: static-acme-challenge  
+  template:
+    metadata:
+      labels:
+        app: static-acme-challenge
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: static-acme-challenge
+        image: thorstenbaek/static-acme-challenge:latest
+        ports:        
+        - containerPort: 80
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: static-acme-challenge-service
+  namespace: ns-dips-ehr
+spec:
+  selector:
+    app: static-acme-challenge
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80         
+---      
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  namespace: ns-dips-ehr 
+  annotations:
+    kubernetes.io/ingress.class: nginx    
+    nginx.ingress.kubernetes.io/rewrite-target: /$2    
+    service.beta.kubernetes.io/azure-dns-label-name: dips-ehr # => http://dips-ehr.norwayeast.cloudapp.azure.com/
+spec:
+  tls:
+  - hosts:       
+      - localhost
+    secretName: ssl-certificate
+  rules:  
+  - host: localhost
+    http:
+      paths:      
+      - path: /fhir-service(/|$)(.*)
+        backend:
+          serviceName: fhir-service
+          servicePort: 80
+      - path: /security(/|$)(.*)        
+        backend:
+          serviceName: security-service
+          servicePort: 80
+  - host: dips-ehr.norwayeast.cloudapp.azure.com
+    http:
+      paths:      
+      - path: /fhir-service(/|$)(.*)
+        backend:
+          serviceName: fhir-service
+          servicePort: 80
+      - path: /security(/|$)(.*)
+        backend:
+          serviceName: security-service
+          servicePort: 80
+          
