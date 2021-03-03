@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('njwt');
 
-const PORT = 80;
+const PORT = process.env.IN_CONTAINER ? 80 : 8000;
 
 var app = express();
 app.use(cors());
@@ -14,26 +14,58 @@ app.all("*", function (req, res, next) {  // runs on ALL requests
 
 app.get("/authorize", (req, res) => {
     console.log("Authorize was called");
+
     res.redirect(`${req.query.redirect_uri}/?state=${req.query.state}&code=${req.query.launch}`);
 });
 
 app.post("/token", (req, res) => {
-    console.log("Token was called " + req.fullUrl);    
+    console.log("Token was called ");    
     
     const claims = 
     { 
-        iss: 'dips-ehr-security', 
-        sub: 'Fhir authorization token',        
         aud: req.fullUrl,
+        fhirUser: "Practitioner/f58db7ee-0c33-43e3-8f91-c33bd9255455",
+        iss: 'dips-ehr-security', 
+        profile: "Practitioner/f58db7ee-0c33-43e3-8f91-c33bd9255455",
+        sub: 'Fhir authorization token',
     }
-        
+
     const token = jwt.create(claims, 'top-secret-phrase', 'HS256')
-    token.setExpiration(new Date().getTime() + 60*1000)
-    console.log(token.compact());
+    token.setExpiration(new Date().getTime() + 60*1000)    
+
+    let patient = "";
+    let encounter = "";
+    let resource = "";
+    var context = req.body.code;
+    if (context.includes(":")) //TODO - replace this hack with JWT containing the real context
+    {
+        var split = context.split(":");
+        if (split.length == 3)
+        {
+            patient = split[0];
+            encounter = split[1];
+            resource = split[2];
+        }
+        else
+        {
+            patient = split[0]; // always extract patient
+        }
+    }
+    else
+    {
+        patient = context;    
+    }
 
     var tokenResponse = {
-        access_token: token.compact(),
-        patient: req.body.code
+        access_token: token.compact(),        
+        id_token: token.compact(),
+        client_id: req.body.client_id,
+        patient: patient,
+        expires_in: 6000,
+        encounter: encounter,
+        resource: resource,
+        scope: "launch launch/patient patient/*.write patient/read offline_access openid fhirUser",
+        token_type: "bearer"
     };
     
     res.send(tokenResponse)            
