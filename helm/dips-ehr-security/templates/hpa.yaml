@@ -3,6 +3,7 @@ apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "dips-ehr-security.fullname" . }}
+  namespace: {{ .Release.Name }}
   labels:
     {{- include "dips-ehr-security.labels" . | nindent 4 }}
 spec:

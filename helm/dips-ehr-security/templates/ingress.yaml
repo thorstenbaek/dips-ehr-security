@@ -1,5 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "dips-ehr-security.fullname" . -}}
+{{- $releaseName := .Release.Name -}}
+{{- $domain := .Values.domain -}}
 {{- $svcPort := .Values.service.port -}}
 {{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
@@ -16,6 +18,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
+  namespace: {{ $releaseName }}
   labels:
     {{- include "dips-ehr-security.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
@@ -31,14 +34,14 @@ spec:
     {{- range .Values.ingress.tls }}
     - hosts:
         {{- range .hosts }}
-        - {{ . | quote }}
+        - {{ printf "%s.%s.%s" $releaseName . $domain | quote }}
         {{- end }}
       secretName: {{ .secretName }}
     {{- end }}
   {{- end }}
   rules:
     {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host: {{ printf "%s.%s.%s" $releaseName .host $domain | quote }}
       http:
         paths:
           {{- range .paths }}
